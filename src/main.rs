@@ -1,10 +1,18 @@
+use std::net::Ipv4Addr;
+
 type Error = Box<dyn std::error::Error>;
 type Result<T> = std::result::Result<T, Error>;
 pub struct BytePacketBuffer {
     pub buf: [u8; 512],
     pub pos: usize
 }
-
+/// Add more records
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DnsQuestion {
+    pub name: String,
+    pub qtype: QueryType
+}
+/// DNS Header
 #[derive(Clone, Debug)]
 pub struct DnsHeader {
     pub id: u16, //16byte
@@ -27,6 +35,7 @@ pub struct DnsHeader {
     pub resource_entries: u16,
 }
 
+/// rescode values
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ResultCode {
     NOERROR = 0,
@@ -36,7 +45,33 @@ pub enum ResultCode {
     NOTIMP = 4,
     REFUSED = 5,
 }
+/// Record type being queried
+#[derive(PartialEq, Eq, Debug, Clone, Copy, Hash)]
+pub enum QueryType {
 
+    UNKNOWN(u16),
+    A, // 1
+
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]
+#[allow(dead_code)]
+pub enum DnsRecord{
+    UNKNOWN {
+        domain: String,
+        qtype: u16,
+        data_len: u16,
+        ttl: u32
+    }, // 0
+    A {
+        domain: String,
+        addr: Ipv4Addr,
+        ttl: u32
+    } // 1
+
+}
+
+// Reading the domain name using BytePacketBuffer
 impl BytePacketBuffer {
     /// Buffer for holding packet contents and to keep track of position.
     pub fn new() -> BytePacketBuffer {
@@ -226,6 +261,39 @@ impl DnsHeader {
         self.answers = buffer.read_u16()?;
         self.authoritative_entries = buffer.read_u16()?;
         self.resource_entries = buffer.read_u16()?;
+
+        Ok(())
+    }
+}
+
+impl QueryType {
+    pub fn to_num(&self) -> u16 {
+        match *self {
+            QueryType::UNKNOWN(x) => x,
+            QueryType::A => 1,
+        }
+    }
+
+    pub fn from_num(num: u16) -> QueryType {
+        match num {
+            1 => QueryType::A,
+            _ => QueryType::UNKNOWN(num),
+        }
+    }
+}
+
+impl DnsQuestion {
+    pub fn new(name: String, qtype: QueryType) -> DnsQuestion {
+        DnsQuestion {
+            name, 
+            qtype 
+        }
+    }
+
+    pub fn read(&mut self, buffer: &mut BytePacketBuffer) -> Result<()> {
+        buffer.read_qname(&mut self.name)?;
+        self.qtype = QueryType::from_num(buffer.read_u16()?);
+        let _ = buffer.read_u16()?;
 
         Ok(())
     }
