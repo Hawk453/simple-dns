@@ -89,7 +89,46 @@ impl BytePacketBuffer {
 
         let mut delim = "";
         loop {
-            
+            if jumps_performed > max_jumps {
+                return Err(format!("Limit of {} jumps exeeded", max_jumps).into())
+            }
+
+            let len = self.single_byte(pos)?;
+            if (len & 0xC0) == 0xC0 {
+                if !jumped {
+                    self.seek(pos + 2)?;
+                }
+                let byte = self.single_byte(pos + 1)? as u16;
+                let offset = (((len as u16)^0xC0) << 8) | byte;
+                pos = offset as usize;
+
+                jumped = true;
+                jumps_performed += 1;
+
+                continue;
+            }
+            else {
+                pos += 1;
+                if len == 0 {
+                    break;
+                }
+                outstr.push_str(delim);
+
+                outstr.push_str(
+                    &String::from_utf8_lossy(
+                    self.range_of_bytes
+                    (pos, len as usize)?
+                    )
+                    .to_lowercase());
+
+                delim = ".";
+                pos += len as usize;
+
+            }
+        }
+
+        if !jumped {
+            self.seek(pos)?;
         }
 
         Ok(())
