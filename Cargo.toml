@@ -1,7 +1,10 @@
 [package]
 name = "simple-dns"
 version = "0.1.0"
+authors = ["Saksham Madan <contact_saksham.unserialize@simplelogin.co>"]
 edition = "2021"
+repository = "https://github.com/Hawk453/simple-dns"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

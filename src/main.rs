@@ -1,4 +1,4 @@
-use std::net::Ipv4Addr;
+use std::{net::Ipv4Addr, fs::File, io::Read};
 
 type Error = Box<dyn std::error::Error>;
 type Result<T> = std::result::Result<T, Error>;
@@ -38,7 +38,7 @@ pub struct DnsHeader {
 #[derive(Clone, Debug)]
 pub struct DnsPacket {
     pub header: DnsHeader,
-    pub question: Vec<DnsQuestion>,
+    pub questions: Vec<DnsQuestion>,
     pub answers: Vec<DnsRecord>,
     pub authorities: Vec<DnsRecord>,
     pub resources: Vec<DnsRecord>
@@ -356,7 +356,7 @@ impl DnsPacket {
     pub fn new() -> DnsPacket {
         DnsPacket { 
             header: DnsHeader::new(), 
-            question: Vec::new(), 
+            questions: Vec::new(), 
             answers: Vec::new(), 
             authorities: Vec::new(), 
             resources: Vec::new() 
@@ -372,7 +372,7 @@ impl DnsPacket {
             question.read(buffer)?;
 
             result
-            .question
+            .questions
             .push(question);
         }
 
@@ -399,6 +399,27 @@ impl DnsPacket {
     }
 }
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> Result<()>{
+    let mut f = File::open("response_packet_new.txt").expect("Unable to open file");
+    let mut buffer = BytePacketBuffer::new();
+
+    f.read(&mut buffer.buf)?;
+
+    let packet =  DnsPacket::from_buffer(&mut buffer)?;
+    println!("{:#?}", packet.header);
+
+    for q in packet.questions {
+        println!("{:#?}", q);
+    }
+    for rec in packet.answers {
+        println!("{:#?}", rec);
+    }
+    for rec in packet.authorities {
+        println!("{:#?}", rec);
+    }
+    for rec in packet.resources {
+        println!("{:#?}", rec);
+    }
+
+    Ok(())
 }
