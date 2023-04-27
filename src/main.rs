@@ -35,6 +35,15 @@ pub struct DnsHeader {
     pub resource_entries: u16,
 }
 
+#[derive(Clone, Debug)]
+pub struct DnsPacket {
+    pub header: DnsHeader,
+    pub question: Vec<DnsQuestion>,
+    pub answers: Vec<DnsRecord>,
+    pub authorities: Vec<DnsRecord>,
+    pub resources: Vec<DnsRecord>
+}
+
 /// rescode values
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ResultCode {
@@ -56,6 +65,7 @@ pub enum QueryType {
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]
 #[allow(dead_code)]
+/// to keep track of record types
 pub enum DnsRecord{
     UNKNOWN {
         domain: String,
@@ -70,6 +80,8 @@ pub enum DnsRecord{
     } // 1
 
 }
+
+
 
 // Reading the domain name using BytePacketBuffer
 impl BytePacketBuffer {
@@ -337,6 +349,53 @@ impl DnsRecord {
                 )
             }
         }
+    }
+}
+
+impl DnsPacket {
+    pub fn new() -> DnsPacket {
+        DnsPacket { 
+            header: DnsHeader::new(), 
+            question: Vec::new(), 
+            answers: Vec::new(), 
+            authorities: Vec::new(), 
+            resources: Vec::new() 
+        }
+    }
+
+    pub fn from_buffer(buffer: &mut BytePacketBuffer) -> Result<DnsPacket> {
+        let mut result = DnsPacket::new();
+        result.header.read(buffer)?;
+
+        for _ in 0..result.header.questions {
+            let mut question = DnsQuestion::new("".to_string(), QueryType::UNKNOWN(0));
+            question.read(buffer)?;
+
+            result
+            .question
+            .push(question);
+        }
+
+        for _ in 0..result.header.answers {
+            result
+            .answers
+            .push(DnsRecord::read(buffer)?);
+        }
+
+        for _ in 0..result.header.authoritative_entries {
+            result
+            .authorities
+            .push(DnsRecord::read(buffer)?);
+        }
+
+        for _ in 0..result.header.resource_entries {
+            result
+            .resources
+            .push(DnsRecord::read(buffer)?);
+        }
+
+        Ok(result)
+
     }
 }
 
