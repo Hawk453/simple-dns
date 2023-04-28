@@ -5,6 +5,7 @@ authors = ["Saksham Madan <contact_saksham.unserialize@simplelogin.co>"]
 edition = "2021"
 repository = "https://github.com/Hawk453/simple-dns"
 readme = "README.md"
+license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
