@@ -1,11 +1,10 @@
 # Simple-DNS
 
-<img alt="GitHub" src="https://img.shields.io/github/license/Hawk453/simple-dns?style=flat-square"> 
-<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Hawk453/simple-dns?style=flat-square&color=44AA44">
+<img alt="GitHub" src="https://img.shields.io/github/license/Hawk453/simple-dns?style=flat-square"> <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Hawk453/simple-dns?style=flat-square&color=44AA44">
 
 ## What is Simple-DNS?
 
-A straightforward and intelligible DNS Server written safe rust to provide a quick and easy understanding of DNS.
+A straightforward and intelligible DNS Server written in safe rust to provide a quick and easy understanding of DNS.
 **Disclaimer:** This project is not meant for production usecase. 
 
 ## Get Started
@@ -23,8 +22,10 @@ cargo run
 - [ ] Recursive Resolve
 - [ ] DNS compression when writing
 - [ ] Authoritative Server
+- [ ] Caching Server
 - [ ] Forwarding Queries to a DNS Server of choice
 - [ ] Protect against DDOS attacks (to a degree)
+- [ ] TTD
 
 ## Credit
 
