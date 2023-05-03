@@ -8,7 +8,7 @@ use std::net::UdpSocket;
 use simple_dns::{BytePacketBuffer, DnsPacket, QueryType, DnsQuestion};
 
 fn main() -> Result<()>{
-    let qname = "google.com";
+    let qname = "www.yahoo.com";
     let qtype = QueryType::A;
     let server = ("8.8.8.8", 53); // public google server
     let socket = UdpSocket::bind(("0.0.0.0", 43210))?; // Arbitrary Port
