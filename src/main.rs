@@ -5,9 +5,9 @@ type Result<T> = std::result::Result<T, Error>;
 
 use std::net::UdpSocket;
 
-use simple_dns::{BytePacketBuffer, DnsPacket, QueryType, DnsQuestion};
+use simple_dns::{BytePacketBuffer, DnsPacket, DnsQuestion, QueryType};
 
-fn main() -> Result<()>{
+fn main() -> Result<()> {
     let qname = "www.yahoo.com";
     let qtype = QueryType::A;
     let server = ("8.8.8.8", 53); // public google server
@@ -17,9 +17,9 @@ fn main() -> Result<()>{
     packet.header.id = 6666;
     packet.header.questions = 1;
     packet.header.recursion_desired = true;
-    packet.questions.push(
-        DnsQuestion::new(qname.to_string(), qtype)
-    );
+    packet
+        .questions
+        .push(DnsQuestion::new(qname.to_string(), qtype));
 
     let mut buffer = BytePacketBuffer::new();
     packet.write(&mut buffer)?;
