@@ -113,7 +113,7 @@ impl BytePacketBuffer {
     }
 
     /// Current position within buffer
-    fn pos(&self) -> usize {
+    pub fn pos(&self) -> usize {
         self.pos
     }
 
@@ -151,7 +151,7 @@ impl BytePacketBuffer {
     } // get function
 
     /// Get a range of bytes
-    fn range_of_bytes(&mut self, start: usize, len: usize) -> Result<&[u8]> {
+    pub fn range_of_bytes(&mut self, start: usize, len: usize) -> Result<&[u8]> {
         if start + len >= 512 {
             return Err("End of buffer".into());
         }
