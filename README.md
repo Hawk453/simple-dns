@@ -2,6 +2,10 @@
 
 <img alt="GitHub" src="https://img.shields.io/github/license/Hawk453/simple-dns?style=flat-square"> <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Hawk453/simple-dns?style=flat-square&color=44AA44">
 
+### ONLY STUB RESOLVER
+
+Dev Build is for high optimization and DNSSEC. Work in Progress.
+
 ## What is Simple-DNS?
 
 A straightforward and intelligible DNS Server written in safe rust to provide a quick and easy understanding of DNS.
@@ -19,10 +23,7 @@ cargo run
 ## Goals and ToDo
 
 - [x] Stub Resolver
-- [ ] Recursive Resolve
 - [ ] DNS compression when writing
-- [ ] Authoritative Server
-- [ ] Caching Server
 - [ ] Forwarding Queries to a DNS Server of choice
 - [ ] Protect against DDOS attacks (to a degree)
 - [ ] TTD
