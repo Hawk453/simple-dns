@@ -5,7 +5,7 @@
 ## What is Simple-DNS?
 
 A straightforward and intelligible DNS Server written in safe rust to provide a quick and easy understanding of DNS.
-**Disclaimer:** This project is not meant for production usecase. 
+**Disclaimer:** This project is not meant for production usecase. No DNSSEC implemented. Use at own risk.
 
 ## Get Started
 
@@ -21,11 +21,12 @@ cargo run
 - [x] Stub Resolver
 - [ ] Recursive Resolve
 - [ ] DNS compression when writing
-- [ ] Authoritative Server
-- [ ] Caching Server
-- [ ] Forwarding Queries to a DNS Server of choice
+- [X] Caching Server
+- [X] Forwarding Queries to a DNS Server of choice
 - [ ] Protect against DDOS attacks (to a degree)
 - [ ] TTD
+
+This is not an Authoritative Server.
 
 ## Credit
 
