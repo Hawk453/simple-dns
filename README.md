@@ -19,7 +19,7 @@ cargo run
 ## Goals and ToDo
 
 - [x] Stub Resolver
-- [ ] Recursive Resolve
+- [x] Recursive Resolve
 - [ ] DNS compression when writing
 - [X] Caching Server
 - [X] Forwarding Queries to a DNS Server of choice
